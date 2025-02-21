@@ -45,14 +45,22 @@ foreach ($lg in $log){
     $i = $i+1
     
 }
+
+
+#=============
+# clear disk 1
+$d0 = Read-Host "enter number disk source"
+
+$d = Read-Host "enter number disk destination"
+
 #==========
 # Pars Disk
 $Disk = Import-Csv -Path "c:\cmd\log.csv" -Delimiter ";"
-foreach ($d in $Disk){
-    if ($d.Disk -like "Disk0"){
-        $d1 = $d.Disk.Replace("Disk", "")
+foreach ($d1 in $Disk){
+    if ($d1.Disk -like "Disk"+$d0){
+        $d2 = $d1.Disk.Replace("Disk", "")
 $param = @"
-select disk $d1
+select disk $d2
 list partition
 "@
 
@@ -91,11 +99,7 @@ foreach ($lg in $log){
     
 }
 
-#=============
-# clear disk 1
-$d0 = Read-Host "enter number disk source"
 
-$d = Read-Host "enter number disk destination"
 $param = @"
 select disk $d 
 clean
@@ -345,7 +349,7 @@ $vol = Read-Host "enter volume"
 $param = @"
 select disk $d 
 clean
-convert gpt
+Convert gpt
 "@
 
         Out-File -FilePath c:\cmd\param1.txt -InputObject $param -Encoding ascii -NoNewline 

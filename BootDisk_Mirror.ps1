@@ -1,9 +1,15 @@
+[Console]::outputEncoding
 echo "start"
 rm c:\cmd\log.csv
 rm c:\cmd\log1.csv
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 Write-Host "Press Enter for continue"
+Read-Host
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+#$path="c:\cmd\"
+#set /p $text="list disk" > C:\cmd\param.txt
+#Write-Output "list disk"
+#echo "" >> param.txt
 
 #==============
 # Get Disk
@@ -304,3 +310,68 @@ Add disk=$d
 "@
 Out-File -FilePath c:\cmd\param1.txt -InputObject $param -Encoding ascii -NoNewline 
 diskpart.exe /s "c:\cmd\param1.txt"
+#diskpart.exe /s "c:\cmd\param1.txt" > c:\cmd\log1.txt
+#$log = Get-Content -Path "c:\cmd\log.txt"
+#echo = $log.
+#delete c:\cmd\log.txt
+
+
+#======= Create morr Mirror 
+
+$request= Read-Host - "Create anothe RAID MIRROR Y\N"
+
+if ($request -like "Y"){
+$param = @"
+list disk
+"@
+Out-File -FilePath c:\cmd\param1.txt -InputObject $param -Encoding ascii -NoNewline 
+diskpart.exe /s "c:\cmd\param1.txt"
+
+$d0 = Read-Host "enter number disk source"
+
+$d = Read-Host "enter number disk destination"
+
+$param = @"
+select disk $d0 
+list volume
+"@
+Out-File -FilePath c:\cmd\param1.txt -InputObject $param -Encoding ascii -NoNewline 
+diskpart.exe /s "c:\cmd\param1.txt"
+
+$vol = Read-Host "enter volume"
+
+
+
+$param = @"
+select disk $d 
+clean
+convert gpt
+"@
+
+        Out-File -FilePath c:\cmd\param1.txt -InputObject $param -Encoding ascii -NoNewline 
+        diskpart.exe /s "c:\cmd\param1.txt"
+        Start-Sleep 3
+
+$param = @"
+select disk $d0 
+Convert dynamic
+"@
+Out-File -FilePath c:\cmd\param1.txt -InputObject $param -Encoding ascii -NoNewline 
+diskpart.exe /s "c:\cmd\param1.txt"
+
+$param = @"
+select disk $d 
+Conv dyn
+"@
+Out-File -FilePath c:\cmd\param1.txt -InputObject $param -Encoding ascii -NoNewline 
+diskpart.exe /s "c:\cmd\param1.txt"
+
+$param = @"
+select disk $d0 
+Select volume $vol
+Add disk=$d
+"@
+Out-File -FilePath c:\cmd\param1.txt -InputObject $param -Encoding ascii -NoNewline 
+diskpart.exe /s "c:\cmd\param1.txt"
+
+}

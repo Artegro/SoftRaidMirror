@@ -15,7 +15,7 @@ Read-Host
 # Get Disk
 $param="list disk"
 Out-File -FilePath c:\cmd\param1.txt -InputObject $param -Encoding ascii -NoNewline 
-$log = diskpart.exe /s "c:\cmd\param.txt" # > c:\cmd\log.txt
+$log = diskpart.exe /s "c:\cmd\param1.txt" # > c:\cmd\log.txt
 
 $i = 0
 foreach ($lg in $log){
